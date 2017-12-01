@@ -59,13 +59,11 @@ class Beamformer:
         #print('Phase shifting signals')
         if ReceivedSignals!=None:
             self.ReceivedSignals = ReceivedSignals
-
-
         else:
             self.ReceivedSignals = self.CalculateReceivedSignals(signals)
 
-        self.wsignal = np.zeros(np.shape(self.weights))
-        self.wspectrum = np.zeros(np.shape(self.weights))
+        self.wsignal = np.zeros(np.shape(self.weights))*(1+1j)
+        self.wspectrum = np.zeros(np.shape(self.weights))*(1+1j)
 
         for i in range(self.NAntennas):
             s = ReceivedSignals[i]

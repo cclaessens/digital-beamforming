@@ -104,6 +104,8 @@ class SetOfBeamformers:
         #plt.xticks(range(len(self.MaxPeak)), self.MaxPeak.keys())
         plt.subplot(121)
         
+        return self.MaxPeakFreq[highlight][0], self.MaxPeak[highlight]
+        
     
     def FormerOverFreq(self, NFreqBins=10):
     # highlight all beamformer that found a signal above threshold for frequency ranges
@@ -147,3 +149,18 @@ class SetOfBeamformers:
         plt.colorbar()
         plt.xlabel('F [MHz]')
         plt.ylabel('Beamformer no')
+        
+    def Magnitude(self, freqlimits):
+        Z = np.zeros(self.Nbeamformers+1)
+        r = np.copy(Z)
+        phi = np.copy(Z)
+        
+        iBins = np.where((self.FormedSpectrum['0'][0]>freqlimits[0]) & (self.FormedSpectrum['0'][0]<=freqlimits[1]))
+        #print(freqlimits, np.shape(iBins), np.shape(self.FormedSpectrum['0'][0]))
+        
+        for i in self.Beamformers.keys():   
+            # for surf plot
+            r[int(i)], phi[int(i)] = self.Beamformers[i].r, self.Beamformers[i].phi
+            Z[int(i)] = np.max(np.abs(self.FormedSpectrum[i][1][iBins]))
+            
+        return r, phi, Z
